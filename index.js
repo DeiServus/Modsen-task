@@ -6,9 +6,9 @@ const server = http.createServer(app);
 
 //app.use('/api', []);
 
-const start = async ()=> {
+const start = ()=> {
     try {
-        server.listen(5000, async() => {
+        server.listen(5000, () => {
             console.log("Server is running on port 5000");
         });
     } catch(e) {
