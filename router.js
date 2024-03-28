@@ -27,3 +27,5 @@ router.delete(
     '/meetup/:id',
     meetupController.deleteMeetup
 )
+
+module.exports = router;

@@ -1,11 +1,12 @@
 const express = require("express");
 const http = require('http');
+const router = require("./router");
 
 const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
-app.use('/api', []);
+app.use('/api', router);
 
 const start = ()=> {
     try {
