@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require('http');
 const router = require("./router");
-const { error } = require("console");
 
 const app = express();
 const server = http.createServer(app);
