@@ -1,4 +1,5 @@
 const meetupService = require('./service');
+const meetupDTO = require('./dto');
 
 class MeetupController {
     async getMeetups(req, res, next) {
@@ -23,20 +24,32 @@ class MeetupController {
     async postMeetup(req, res, next) {
         try {
             const {name, description, tags, time_location} = req.body;
+
+            const { error } = meetupDTO.validate({ name, description, tags, time_location });
+            if (error) {
+                throw new Error("Problems with validation");
+            }
+
             const meetup = await meetupService.postMeetup(name, description, tags, time_location);
             return res.json(meetup);
         } catch (e) {
-            
+            next(e);
         }
     }
 
     async putMeetup(req, res, next) {
         try {
             const {id, name, description, tags, time_location} = req.body;
+
+            const { error } = meetupDTO.validate({ name, description, tags, time_location });
+            if (error) {
+                throw new Error("Problems with validation");
+            }
+
             const meetup = await meetupService.putMeetup(id, name, description, tags, time_location);
             return res.json(meetup);
         } catch (e) {
-            
+            next(e);
         }
     }
 
