@@ -42,6 +42,15 @@ class MeetupService {
         });
         return {meetup: meetup};
     }
+
+    async deleteMeetup(id) {
+        const meetup =  await prisma.meetups.delete({
+            where: {
+                id: +id
+            }
+        });
+        return {meetup: meetup};
+    }
 }
 
 module.exports = new MeetupService();

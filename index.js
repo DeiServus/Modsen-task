@@ -4,7 +4,8 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 
-//app.use('/api', []);
+app.use(express.json());
+app.use('/api', []);
 
 const start = ()=> {
     try {
