@@ -2,8 +2,29 @@ const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
 class MeetupService {
-    async getMeetups() {
-        const meetups = await prisma.meetups.findMany();
+    async getMeetups(searchTerm, sort, page, pageSize) {
+        page = page || 1;
+        pageSize = pageSize || 3;
+        searchTerm = searchTerm || "";
+        const skip = (page - 1) * pageSize;
+        let order = {};
+
+        if(sort === 'asc' || sort === 'desc')
+            order['id'] = sort;
+
+        const meetups = await prisma.meetups.findMany({
+            where: {
+                OR: [
+                    { name: {contains: searchTerm} },
+                    { description: {contains: searchTerm} },
+                    { tags: {contains: searchTerm} },
+                    { time_location: {contains: searchTerm} }
+                ]
+            },
+            skip: skip,
+            take: +pageSize,
+            orderBy: order
+        });
         return {meetups: meetups};
     }
 
