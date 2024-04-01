@@ -1,0 +1,193 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Meetup API",
+      "version": "1.0.0",
+      "description": "API endpoints for managing meetups"
+    },
+    "paths": {
+      "/api/meetup": {
+        "get": {
+          "summary": "Get meetups",
+          "parameters": [
+            {
+              "name": "searchTerm",
+              "in": "query",
+              "description": "Search term",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort order (asc/desc)",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Page number",
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "description": "Number of items per page",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "meetups": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Meetup"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new meetup",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meetup"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Meetup"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/meetup/{id}": {
+        "get": {
+          "summary": "Get a meetup by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Meetup ID",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Meetup"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a meetup",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meetup"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Meetup"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a meetup",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Meetup ID",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Meetup"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Meetup": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description":{
+          "type": "string"
+        },
+        "tags": {
+            "type": "string"
+        },
+        "time_location": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}}
