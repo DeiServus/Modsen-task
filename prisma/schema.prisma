@@ -20,4 +20,12 @@ model users {
   login         String  @db.VarChar(255)
   password      String  @db.VarChar(255)
   isOrganizer   Boolean @default(false)
+  tokens         tokens?
+}
+
+model tokens {
+  id           Int          @id @default(autoincrement())
+  userId       Int          @unique(map: "UQ__token__CB9A1CFE4C943FA7")
+  refreshToken String       @unique(map: "UQ__token__D771D24AC86C67AA") @db.VarChar(255)
+  users users @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_tokens_users")
 }
