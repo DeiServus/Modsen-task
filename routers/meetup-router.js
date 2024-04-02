@@ -1,5 +1,5 @@
 const express = require('express');
-const meetupController = require('./controller');
+const meetupController = require('../controllers/controller');
 
 const router = express.Router();
 

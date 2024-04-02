@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require('http');
 const fs = require('fs');
-const router = require("./router");
+const router = require("./routers/router");
 const swaggerUi = require('swagger-ui-express');
 
 const app = express();

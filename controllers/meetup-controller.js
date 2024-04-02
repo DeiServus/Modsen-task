@@ -1,5 +1,5 @@
-const meetupService = require('./service');
-const meetupDTO = require('./dto');
+const meetupService = require('../services/service');
+const meetupDTO = require('../dto');
 
 class MeetupController {
     async getMeetups(req, res, next) {
