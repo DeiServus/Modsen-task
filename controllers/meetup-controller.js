@@ -1,4 +1,4 @@
-const meetupService = require('../services/service');
+const meetupService = require('../services/meetup-service');
 const meetupDTO = require('../dto');
 
 class MeetupController {
