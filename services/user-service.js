@@ -5,6 +5,13 @@ const bcrypt = require('bcrypt');
 
 class UserService {
     async registration(login, password) {
+        const check = await prisma.users.findFirst({
+            where: {
+                login: login
+            }
+        })
+        if(check)
+            throw Error("Пользователь уже есть в базе")
         const hashPassword = bcrypt.hashSync(password, 3);
         const user = await prisma.users.create({
             data:{
@@ -12,7 +19,7 @@ class UserService {
                 password:hashPassword
             }
         })
-        const tokens = tokenService.generateTokens({...user.login})
+        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer})
         await tokenService.saveToken(user.id, tokens.refreshToken)
         return {...tokens, user:user}
     }
@@ -24,7 +31,7 @@ class UserService {
             throw Error('Неверный пароль');
         }
         
-        const tokens = tokenService.generateTokens({...user.login});
+        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
         await tokenService.saveToken(user.id, tokens.refreshToken)
         return {...tokens, user:user}
     }
@@ -47,7 +54,7 @@ class UserService {
         const user = await prisma.user_profile.findFirst({where:{
             id:userData.id
         }})
-        const tokens = tokenService.generateTokens({...user.login});
+        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
         await tokenService.saveToken(user.id, tokens.refreshToken)
 
         return {...tokens, user:user}
