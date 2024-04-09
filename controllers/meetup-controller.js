@@ -44,9 +44,12 @@ class MeetupController {
             const {id, name, description, tags, time_location} = req.body;
 
             const { error } = meetupDTO.validate({ name, description, tags, time_location });
-            if (error) {
+            if (error || !id) {
                 throw new Error("Problems with validation");
             }
+            const check = await meetupService.getMeetupById(id);
+            if(!check.meetup)
+                throw new Error("Такого пользователя не существует");
 
             const meetup = await meetupService.putMeetup(id, name, description, tags, time_location);
             return res.json(meetup);
@@ -58,6 +61,9 @@ class MeetupController {
     async deleteMeetup(req, res, next) {
         try {
             const {id} = req.params;
+            const check = await meetupService.getMeetupById(id);
+            if(!check.meetup)
+                throw new Error("Такого пользователя не существует");
             const meetup = await meetupService.deleteMeetup(id);
             return res.json(meetup);
         } catch (e) {
