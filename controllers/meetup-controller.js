@@ -18,11 +18,6 @@ class MeetupController {
     async postMeetup(req, res) {
         const {name, description, tags, time_location} = req.body;
 
-        const { error } = meetupDTO.validate({ name, description, tags, time_location });
-        if (error) {
-            return res.status(400).json({ error: "Problems with validation" });
-        }
-
         const meetup = await meetupService.postMeetup(name, description, tags, time_location);
         return res.status(200).json(meetup);
     }
@@ -30,10 +25,6 @@ class MeetupController {
     async putMeetup(req, res) {
         const {id, name, description, tags, time_location} = req.body;
 
-        const { error } = meetupDTO.validate({ name, description, tags, time_location });
-        if (error || !id) {
-            return res.status(400).json({ error: "Problems with validation" });
-        }
         const check = await meetupService.getMeetupById(id);
         if(!check.meetup)
             return res.status(404).json({ error: "This user doesn't exist" });
@@ -45,7 +36,7 @@ class MeetupController {
     async deleteMeetup(req, res) {
         const {id} = req.params;
         const check = await meetupService.getMeetupById(id);
-        if(!check.meetup) {
+        if(!check.meetup){
             return res.status(404).json({ error: "This user doesn't exist" });
         }
         const meetup = await meetupService.deleteMeetup(id);

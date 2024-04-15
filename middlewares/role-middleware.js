@@ -1,11 +1,13 @@
+const ApiError = require("../exceptions/api-error");
+
 module.exports = function (req, res, next) {
     try {
         if(!req.user.role){
-            return next(Error("Нет прав"));
+            return next(ApiError.NotOrganizerError());
         }
-
+        
         next();
     } catch(e) {
-        return next(Error("Нет прав"));
+        return next(ApiError.NotOrganizerError());
     }
 }

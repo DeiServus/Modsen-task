@@ -9,9 +9,6 @@ class MeetupService {
         const skip = (page - 1) * pageSize;
         let order = {};
 
-        if(sort === 'asc' || sort === 'desc') {
-            order['id'] = sort;
-        }
         const meetups = await prisma.meetups.findMany({
             where: {
                 OR: [

@@ -2,7 +2,7 @@ const express = require("express");
 const http = require('http');
 const fs = require('fs');
 const mrouter = require("./routers/meetup-router");
-const urouter = require("./routers/user-router");
+const urouter = require("./routers/auth-router");
 const swaggerUi = require('swagger-ui-express');
 const cookieParser = require('cookie-parser');
 

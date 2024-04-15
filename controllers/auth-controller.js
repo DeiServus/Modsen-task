@@ -1,18 +1,17 @@
-const userService = require('../services/user-service');
+const userService = require('../services/auth-service');
 
 class UserController {
     async registration(req, res){
         const {password, login} = req.body;
-
         const userData = await userService.registration(login, password);
-        this.setRefreshTokenCookie('refreshToken', userData.refreshToken);
+        setRefreshTokenCookie(res, userData.refreshToken);
         return res.status(200).json(userData);
     }
 
     async login(req, res){
         const {login, password} = req.body;
         const userData = await userService.login(login, password);
-        this.setRefreshTokenCookie('refreshToken', userData.refreshToken);
+        setRefreshTokenCookie(res, userData.refreshToken);
         return res.status(200).json(userData);
     }
 
@@ -26,13 +25,13 @@ class UserController {
     async refresh(req, res){
         const {refreshToken} = req.cookies;
         const userData = await userService.refresh(refreshToken);
-        this.setRefreshTokenCookie('refreshToken', userData.refreshToken);
+        setRefreshTokenCookie(res, userData.refreshToken);
         return res.status(200).json(userData);
     }
+}
 
-    setRefreshTokenCookie(res, refreshToken) {
-        res.cookie('refreshToken', refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
-    }
+const setRefreshTokenCookie = function(res, refreshToken) {
+    res.cookie('refreshToken', refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
 }
 
 module.exports = new UserController();
