@@ -13,11 +13,11 @@ class UserService {
         if(check){
             throw Error("Пользователь уже есть в базе")
         }
-        const hashPassword = bcrypt.hashSync(password, 3);
+        const hashPassword = this.hashPasswordSync(password);
         const user = await prisma.users.create({
             data:{
                 login: login,
-                password:hashPassword
+                password: hashPassword
             }
         })
         const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer})
@@ -25,11 +25,18 @@ class UserService {
         return {...tokens, user:user}
     }
 
+    hashPasswordSync(password) {
+        return bcrypt.hashSync(password, 3);
+    }
+
     async login(login, password) {
         const user = await prisma.users.findFirst({ where: { login: login } });
+        if (!user) {
+            throw Error('this user does not exist');
+        }
         const isPassEquels = await bcrypt.compare(password, user.password);
         if (!isPassEquels) {
-            throw Error('Неверный пароль');
+            throw Error('Something is wrong');
         }
         
         const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
@@ -44,17 +51,20 @@ class UserService {
 
     async refresh(refreshToken){
         if(!refreshToken){
-            throw Error("Проблемы с токеном 1");
+            throw Error("Unauthorized user");
         }
-        const userData = tokenService.validateToken(refreshToken, "JWT_REFRESH_SECRET");
+        const userData = tokenService.validateToken(refreshToken, process.env.REFRESH_SECRET);
         const tokenFromDb = await tokenService.findToken(refreshToken);
        
         if(!userData || !tokenFromDb){
-            throw Error("Проблемы с токеном 2");
+            throw Error("Unauthorized user");
         }
         const user = await prisma.user_profile.findFirst({where:{
             id:userData.id
         }})
+        if (!user) {
+            throw Error('this user does not exist');
+        }
         const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
         await tokenService.saveToken(user.id, tokens.refreshToken)
 

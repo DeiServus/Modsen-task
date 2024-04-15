@@ -1,11 +1,11 @@
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 3;
+const DEFAULT_SORT = 'asc';
 
 class MeetupService {
-    async getMeetups(searchTerm, sort, page, pageSize) {
-        page = page || 1;
-        pageSize = pageSize || 3;
-        searchTerm = searchTerm || "";
+    async getMeetups(searchTerm = "", sort = DEFAULT_SORT, page = DEFAULT_PAGE, pageSize = DEFAULT_PAGE_SIZE) {
         const skip = (page - 1) * pageSize;
         let order = {};
 
