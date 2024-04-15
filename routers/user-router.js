@@ -1,21 +1,22 @@
 const express = require('express');
 const userController = require('../controllers/user-controller');
+const requestWrap = require('../middlewares/trycatch-middleware');
 
 const router = express.Router();
 
 router.post(
     '/registration',
-    userController.registration
+    requestWrap(userController.registration)
 )
 
 router.post(
     '/login',
-    userController.login
+    requestWrap(userController.login)
 )
 
 router.get(
     '/logout',
-    userController.logout
+    requestWrap(userController.logout)
 )
 
 module.exports = router;
