@@ -4,8 +4,8 @@ const prisma = new PrismaClient();
 
 class TokenService{
     generateTokens(payload){
-        const accessToken = jwt.sign(payload, "JWT_ACCESS_SECRET", {expiresIn:"30m"})
-        const refreshToken = jwt.sign(payload, "JWT_REFRESH_SECRET", {expiresIn:"30d"})
+        const accessToken = jwt.sign(payload, "JWT_ACCESS_SECRET", {expiresIn:process.env.ACCESS_TIME})
+        const refreshToken = jwt.sign(payload, "JWT_REFRESH_SECRET", {expiresIn:process.env.REFRESH_TIME})
         return {
             accessToken,
             refreshToken
@@ -14,13 +14,13 @@ class TokenService{
 
     async saveToken(userId, refreshToken){
         const tokenData = await prisma.tokens.findUnique({where:{
-            userId:+userId
+            userId: parseInt(userId)
         }})
         if(tokenData){
             tokenData.refreshToken = refreshToken;
             return await prisma.tokens.update({
                 where: {
-                    userId: +userId
+                    userId: parseInt(userId)
                 },
                 data: {
                     refreshToken: refreshToken
@@ -29,7 +29,7 @@ class TokenService{
         }
         const token = await prisma.tokens.create({
             data:{
-                userId:+userId,
+                userId: parseInt(userId),
                 refreshToken:refreshToken
             }
         })
@@ -50,18 +50,9 @@ class TokenService{
         return tokenData;
     }
 
-    validateAccessToken(token){
+    validateToken(token, secret){
         try {
-            const userData = jwt.verify(token, "JWT_ACCESS_SECRET");
-            return userData;
-        } catch(e) {
-            return null;
-        }
-    }
-
-    validateRefreshToken(token){
-        try {
-            const userData = jwt.verify(token, "JWT_REFRESH_SECRET");
+            const userData = jwt.verify(token, secret);
             return userData;
         } catch(e) {
             return null;

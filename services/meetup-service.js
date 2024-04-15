@@ -9,9 +9,9 @@ class MeetupService {
         const skip = (page - 1) * pageSize;
         let order = {};
 
-        if(sort === 'asc' || sort === 'desc')
+        if(sort === 'asc' || sort === 'desc') {
             order['id'] = sort;
-
+        }
         const meetups = await prisma.meetups.findMany({
             where: {
                 OR: [
@@ -22,7 +22,7 @@ class MeetupService {
                 ]
             },
             skip: skip,
-            take: +pageSize,
+            take: parseInt(pageSize),
             orderBy: order
         });
         return {meetups: meetups};
@@ -31,7 +31,7 @@ class MeetupService {
     async getMeetupById(id) {
         const meetup =  await prisma.meetups.findFirst({
             where: {
-                id: +id
+                id: parseInt(id)
             }
         });
         return {meetup: meetup};
@@ -52,7 +52,7 @@ class MeetupService {
     async putMeetup(id, name, description, tags, time_location) {
         const meetup = await prisma.meetups.update({
             where: {
-                id: id
+                id: parseInt(id)
             },
             data: {
                 name: name,
@@ -67,7 +67,7 @@ class MeetupService {
     async deleteMeetup(id) {
         const meetup =  await prisma.meetups.delete({
             where: {
-                id: +id
+                id: parseInt(id)
             }
         });
         return {meetup: meetup};

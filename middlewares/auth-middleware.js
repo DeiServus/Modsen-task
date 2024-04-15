@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
             return next(Error("Проблемы авторизаци 2"));
         }
 
-        const userData = tokenService.validateAccessToken(accessToken);
+        const userData = tokenService.validateToken(accessToken, "JWT_ACCESS_SECRET");
         if(!userData){
             return next(Error("Проблемы авторизаци 3"));
         }

@@ -45,8 +45,9 @@ class MeetupController {
     async deleteMeetup(req, res) {
         const {id} = req.params;
         const check = await meetupService.getMeetupById(id);
-        if(!check.meetup)
+        if(!check.meetup) {
             return res.status(404).json({ error: "This user doesn't exist" });
+        }
         const meetup = await meetupService.deleteMeetup(id);
         return res.status(200).json(meetup);
     }

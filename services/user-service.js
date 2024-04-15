@@ -10,8 +10,9 @@ class UserService {
                 login: login
             }
         })
-        if(check)
+        if(check){
             throw Error("Пользователь уже есть в базе")
+        }
         const hashPassword = bcrypt.hashSync(password, 3);
         const user = await prisma.users.create({
             data:{
@@ -45,7 +46,7 @@ class UserService {
         if(!refreshToken){
             throw Error("Проблемы с токеном 1");
         }
-        const userData = tokenService.validateRefreshToken(refreshToken);
+        const userData = tokenService.validateToken(refreshToken, "JWT_REFRESH_SECRET");
         const tokenFromDb = await tokenService.findToken(refreshToken);
        
         if(!userData || !tokenFromDb){
