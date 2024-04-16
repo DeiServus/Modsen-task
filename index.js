@@ -15,7 +15,8 @@ const swaggerFile = fs.readFileSync('./swagger.json', 'utf8');
 const swaggerDocument = JSON.parse(swaggerFile);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api', [mrouter, urouter]);
+app.use('/meetup', mrouter);
+app.use('', urouter);
 app.use((err, req, res, next) => {
     return res.status(400).json({message: err.message});
 })

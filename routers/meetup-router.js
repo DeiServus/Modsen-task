@@ -8,20 +8,20 @@ const validateMiddlewares = require('../middlewares/validate-middlewares');
 const router = express.Router();
 
 router.get(
-    '/meetup',
+    '',
     authMiddleware,
     validateMiddlewares.getMeetupValidator,
     requestWrap(meetupController.getMeetups)
 )
 
 router.get(
-    '/meetup/:id',
+    '/:id',
     authMiddleware,
     requestWrap(meetupController.getMeetupById)
 )
 
 router.post(
-    '/meetup',
+    '',
     authMiddleware,
     roleMiddleware,
     validateMiddlewares.postMeetupValidator,
@@ -29,7 +29,7 @@ router.post(
 )
 
 router.put(
-    '/meetup',
+    '',
     authMiddleware,
     roleMiddleware,
     validateMiddlewares.putMeetupValidator,
@@ -37,7 +37,7 @@ router.put(
 )
 
 router.delete(
-    '/meetup/:id',
+    '/:id',
     authMiddleware,
     roleMiddleware,
     requestWrap(meetupController.deleteMeetup)
