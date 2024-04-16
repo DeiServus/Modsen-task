@@ -34,13 +34,14 @@ class MeetupService {
         return {meetup: meetup};
     }
 
-    async postMeetup(name, description, tags, time_location) {
+    async postMeetup(name, description, tags, time_location, organizerId) {
         const meetup = await prisma.meetups.create({
             data: {
                 name: name,
                 description: description,
                 tags: tags,
-                time_location: time_location
+                time_location: time_location,
+                organizerId: parseInt(organizerId)
             }
         });
         return {meetup: meetup};

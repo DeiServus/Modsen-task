@@ -1,5 +1,6 @@
 const meetupDTO = require('../dto/dto');
 const getMeetupsSchema = require('../dto/meetup-dto')
+const participantDTO = require('../dto/participant-dto');
 
 const postMeetupValidator = (req, res, next) => {
     const { error } = meetupDTO.validate(req.body);
@@ -29,8 +30,17 @@ const getMeetupValidator = (req, res, next) => {
     next();
 };
 
+const postParticipantValidator = (req, res, next) => {
+    const { error } = participantDTO.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+    next();
+};
+
 module.exports = {
     postMeetupValidator,
     putMeetupValidator,
-    getMeetupValidator
+    getMeetupValidator,
+    postParticipantValidator
 };

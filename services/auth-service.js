@@ -6,9 +6,9 @@ const bcrypt = require('bcrypt');
 const ApiError = require("../exceptions/api-error");
 
 class AuthService {
-    async registration(login, password) {
-        const user = await userService.postUser(login, password);
-        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer})
+    async registration(login, password, roleId) {
+        const user = await userService.postUser(login, password, roleId);
+        const tokens = tokenService.generateTokens({login: user.login, roleId: user.roleId})
         await tokenService.saveToken(user.id, tokens.refreshToken)
         return {...tokens, user:user}
     }
@@ -23,7 +23,7 @@ class AuthService {
             throw ApiError.BadRequest('Something is wrong');
         }
         
-        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
+        const tokens = tokenService.generateTokens({login: user.login, roleId: user.roleId});
         await tokenService.saveToken(user.id, tokens.refreshToken)
         return {...tokens, user:user}
     }
@@ -49,7 +49,7 @@ class AuthService {
         if (!user) {
             throw ApiError.BadRequest('this user does not exist');
         }
-        const tokens = tokenService.generateTokens({login: user.login, role: user.isOrganizer});
+        const tokens = tokenService.generateTokens({login: user.login, roleId: user.roleId});
         await tokenService.saveToken(user.id, tokens.refreshToken)
 
         return {...tokens, user:user}

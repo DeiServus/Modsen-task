@@ -2,6 +2,7 @@ const express = require("express");
 const http = require('http');
 const fs = require('fs');
 const mrouter = require("./routers/meetup-router");
+const prouter = require("./routers/participant-router");
 const urouter = require("./routers/auth-router");
 const swaggerUi = require('swagger-ui-express');
 const cookieParser = require('cookie-parser');
@@ -15,6 +16,7 @@ const swaggerFile = fs.readFileSync('./swagger.json', 'utf8');
 const swaggerDocument = JSON.parse(swaggerFile);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/participant', prouter);
 app.use('/meetup', mrouter);
 app.use('', urouter);
 app.use((err, req, res, next) => {

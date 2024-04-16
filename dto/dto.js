@@ -5,4 +5,5 @@ module.exports = Joi.object({
     description: Joi.string().min(10).max(500).required(),
     tags: Joi.string().min(3).max(100).required(),
     time_location: Joi.string().required(),
+    organizerId: Joi.number().integer().min(1)
 });

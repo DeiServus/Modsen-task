@@ -13,14 +13,26 @@ model meetups {
   description   String?
   tags          String?
   time_location String  @db.VarChar(255)
+  organizerId   Int     
+  users users @relation(fields: [organizerId], references: [id], onUpdate: NoAction, map: "FK_meetups_organizer")
+  participants  participants[]
 }
 
 model users {
   id            Int     @id @default(autoincrement())
   login         String  @db.VarChar(255)
   password      String  @db.VarChar(255)
-  isOrganizer   Boolean @default(false)
-  tokens         tokens?
+  roleId        Int     @default(1)
+  roles roles   @relation(fields: [roleId], references: [id], onUpdate: NoAction, map: "FK_roles_users") 
+  tokens        tokens?
+  meetups       meetups[]
+  participants  participants[]
+}
+
+model roles {
+  id            Int     @id @default(autoincrement())
+  title         String  @db.VarChar(25)
+  users         users[]
 }
 
 model tokens {
@@ -28,4 +40,12 @@ model tokens {
   userId       Int          @unique(map: "UQ__token__CB9A1CFE4C943FA7")
   refreshToken String       @unique(map: "UQ__token__D771D24AC86C67AA") @db.VarChar(255)
   users users @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_tokens_users")
+}
+
+model participants {
+  id           Int          @id @default(autoincrement())
+  userId       Int
+  meetupId     Int
+  users users @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_participants_users")
+  meetups meetups @relation(fields: [meetupId], references: [id], onUpdate: NoAction, map: "FK_participants_meetups")
 }

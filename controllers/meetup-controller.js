@@ -1,5 +1,5 @@
 const meetupService = require('../services/meetup-service');
-const meetupDTO = require('../dto/dto');
+const userService = require('../services/user-service');
 
 class MeetupController {
     async getMeetups(req, res) {
@@ -16,9 +16,14 @@ class MeetupController {
     }
 
     async postMeetup(req, res) {
-        const {name, description, tags, time_location} = req.body;
+        const {name, description, tags, time_location, organizerId} = req.body;
 
-        const meetup = await meetupService.postMeetup(name, description, tags, time_location);
+        const check = await userService.getUserById(organizerId);
+        if(!check) {
+            return res.status(404).json({ error: "This user doesn't exist" });
+        }
+        
+        const meetup = await meetupService.postMeetup(name, description, tags, time_location, organizerId);
         return res.status(200).json(meetup);
     }
 
@@ -26,9 +31,9 @@ class MeetupController {
         const {id, name, description, tags, time_location} = req.body;
 
         const check = await meetupService.getMeetupById(id);
-        if(!check.meetup)
+        if(!check.meetup){
             return res.status(404).json({ error: "This user doesn't exist" });
-
+        }
         const meetup = await meetupService.putMeetup(id, name, description, tags, time_location);
         return res.status(200).json(meetup);
     }

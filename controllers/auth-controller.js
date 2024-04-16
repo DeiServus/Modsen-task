@@ -2,8 +2,8 @@ const userService = require('../services/auth-service');
 
 class UserController {
     async registration(req, res){
-        const {password, login} = req.body;
-        const userData = await userService.registration(login, password);
+        const {password, login, roleId} = req.body;
+        const userData = await userService.registration(login, password, roleId);
         setRefreshTokenCookie(res, userData.refreshToken);
         return res.status(200).json(userData);
     }
